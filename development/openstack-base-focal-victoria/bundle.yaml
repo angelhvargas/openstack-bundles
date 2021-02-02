@@ -6,7 +6,7 @@ series: focal
 # *** https://docs.openstack.org/project-deploy-guide/charm-deployment-guide **
 variables:
   openstack-origin: &openstack-origin cloud:focal-victoria
-  data-port: &data-port br-ex:eno2
+  data-port: &data-port br-ex:enP2p1s0f2
   worker-multiplier: &worker-multiplier 0.25
   osd-devices: &osd-devices /dev/sdb /dev/vdb
   expected-osd-count: &expected-osd-count 3
@@ -14,10 +14,13 @@ variables:
 machines:
   '0':
     series: focal
+    constraints: arch=arm64
   '1':
     series: focal
+    constraints: arch=arm64
   '2':
     series: focal
+    constraints: arch=arm64
 relations:
 - - nova-compute:amqp
   - rabbitmq-server:amqp
@@ -147,7 +150,7 @@ applications:
     options:
       expected-osd-count: *expected-osd-count
       monitor-count: *expected-mon-count
-      source: *openstack-origin
+      source: distro-proposed  # LA_TEMP
     to:
     - lxd:0
     - lxd:1
@@ -160,7 +163,7 @@ applications:
     num_units: 3
     options:
       osd-devices: *osd-devices
-      source: *openstack-origin
+      source: distro-proposed  # LA_TEMP
     to:
     - '0'
     - '1'
